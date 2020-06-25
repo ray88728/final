@@ -1,21 +1,10 @@
 [
     {
-        "module": "../..",
+        "module": "FXOS8700CQ/FXOS8700CQ.o",
         "size": {
-            ".text": 33926,
-            ".data": 473,
-            ".bss": 6654,
-            ".text-delta": 0,
-            ".data-delta": 0,
-            ".bss-delta": 0
-        }
-    },
-    {
-        "module": "BUILD/K66F",
-        "size": {
-            ".text": 2374,
+            ".text": 152,
             ".data": 0,
-            ".bss": 764,
+            ".bss": 0,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -24,7 +13,7 @@
     {
         "module": "[fill]",
         "size": {
-            ".text": 162,
+            ".text": 203,
             ".data": 11,
             ".bss": 33,
             ".text-delta": 0,
@@ -35,7 +24,7 @@
     {
         "module": "[lib]/c.a",
         "size": {
-            ".text": 31934,
+            ".text": 42060,
             ".data": 2472,
             ".bss": 89,
             ".text-delta": 0,
@@ -77,10 +66,109 @@
         }
     },
     {
+        "module": "bbcar/bbcar",
+        "size": {
+            ".text": 1247,
+            ".data": 0,
+            ".bss": 444,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "bbcar/mbed_rpc",
+        "size": {
+            ".text": 371,
+            ".data": 0,
+            ".bss": 4,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "main.o",
+        "size": {
+            ".text": 1040,
+            ".data": 0,
+            ".bss": 420,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "mbed-os/components",
+        "size": {
+            ".text": 62,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "mbed-os/drivers",
+        "size": {
+            ".text": 2242,
+            ".data": 0,
+            ".bss": 44,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "mbed-os/hal",
+        "size": {
+            ".text": 2023,
+            ".data": 8,
+            ".bss": 131,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "mbed-os/platform",
+        "size": {
+            ".text": 8326,
+            ".data": 261,
+            ".bss": 437,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "mbed-os/rtos",
+        "size": {
+            ".text": 8823,
+            ".data": 168,
+            ".bss": 5972,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "mbed-os/targets",
+        "size": {
+            ".text": 16787,
+            ".data": 36,
+            ".bss": 310,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "summary": {
-            "static_ram": 10528,
+            "static_ram": 10872,
             "static_ram_delta": 0,
-            "total_flash": 74904,
+            "total_flash": 89844,
             "total_flash_delta": 0
         }
     }
