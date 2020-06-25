@@ -21,8 +21,10 @@ Ticker encoder_ticker_right;
 PwmOut pin8(D8), pin9(D9);
 DigitalIn pin3(D3);
 DigitalIn pin4(D4);
-
+DigitalInOut pin13(D13);
 #define bound 0.9
+
+DigitalOut led1(LED1);
 
 BBCar car(pin8, pin9, servo_ticker);
 FXOS8700CQ acc(PTD9, PTD8, (0x1D<<1));
@@ -61,6 +63,54 @@ float pid_process(float in){
 
     return out;
 }
+
+void sort(float thing[], int length, int max_index, int min_index ){
+
+    float max = thing[0];
+    float min = thing[0];
+    int index_max =0;
+    int index_min =0;
+    for( int i=1; i++; i<=length ){
+        if(max < thing[i]){
+            max = thing[i];
+            index_max =i;
+        }
+
+        if(min > thing[i]){
+            min = thing[i];
+            index_min =i;
+        }
+    }
+    max_index = index_max;
+    min_index = index_min;
+}
+
+int find_thing(float thing[]){
+
+    int max_index, min_index;
+
+    sort(thing, 5, max_index, min_index);
+
+    if((abs(thing[2]-thing[3])<0.5)&&(abs(thing[3]-thing[4])<0.5)&&abs(thing[2]-thing[4])<0.5){
+        //RECTANGULAR
+        return 0;
+    }
+    if(max_index == 5){
+        //right triangle
+        return 0;
+    }
+    if(2<=max_index && 4>= max_index){
+        //triangle
+        return 0;
+    }
+    if(2<=min_index && 4>= min_index){
+        //abnormal
+        return 1;
+    }
+
+
+}
+
 
 void messageArrived(MQTT::MessageData& md) {
 
@@ -111,7 +161,8 @@ void close_mqtt() {
 
 
 int main() {
-
+    led1 =1;
+    parallax_ping  ping1(pin13);
     parallax_encoder encoder0(pin4, encoder_ticker_left);
     parallax_encoder encoder1(pin3, encoder_ticker_right);
     encoder0.reset();
@@ -287,6 +338,7 @@ int main() {
     int loop = 0;
     int i;
     while ((find == 0) && (loop < 3)) {
+        float thing[5] ={0};
         for (i = 0; i < 5; i++) {
             encoder1.reset();
             encoder0.reset();
@@ -298,21 +350,7 @@ int main() {
             car.turn(100,0.1);
             while(encoder1.get_cm()<10.7*2*PI/4&&encoder0.get_cm()<10.7*2*PI/4) wait_ms(50);
             car.stop();
-            encoder1.reset();
-            encoder0.reset();
-            car.back(100,0.1);
-            while(encoder1.get_cm()<10.7*2*PI/4&&encoder0.get_cm()<10.7*2*PI/4) wait_ms(50);
-            car.stop();
-            encoder1.reset();
-            encoder0.reset();
-            car.goStraight(100);
-            while(encoder1.get_cm()<45&&encoder0.get_cm()<45) wait_ms(50);
-            car.stop();
-            encoder1.reset();
-            encoder0.reset();
-            car.turn(100,0.1);
-            while(encoder1.get_cm()<10.7*2*PI/4&&encoder0.get_cm()<10.7*2*PI/4) wait_ms(50);
-            car.stop();
+            thing[i] = ping1;
             encoder1.reset();
             encoder0.reset();
             car.back(100,0.1);
@@ -346,8 +384,9 @@ int main() {
             while(encoder0.get_cm()<5*2*PI/4) wait_ms(50);
             car.stop();*/
         }
-        if (find == 0) {
-
+        find = find_thing(thing);
+        if(find == 1){
+            led1 =0;
         }
     }
     car.turn(-100,0.1);
