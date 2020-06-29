@@ -40,6 +40,8 @@ volatile bool closed = false;
 
 const char* topic = "Mbed";
 
+int send =0;
+
 void sort(float thing[], int length, int max_index, int min_index ){
 
     float max = thing[0];
@@ -67,21 +69,21 @@ void find_thing(float thing[],int find){
 
     sort(thing, 5, max_index, min_index);
 
-    if((abs(thing[2]-thing[3])<1)&&(abs(thing[3]-thing[4])<1)&&abs(thing[2]-thing[4])<1){
+    if((abs(thing[2]-thing[3])<5)&&(abs(thing[3]-thing[4])<5)&&abs(thing[2]-thing[4])<5){
         //RECTANGULAR
-        find= 1;
+        find= 5;
     }
     else if(max_index == 4){
         //right triangle
-        find= 0;
+        find= 6;
     }
     else if(2<=max_index && 4>= max_index){
         //triangle
-        find= 0;
+        find= 7;
     }
-    else if(2<=min_index && 4>= min_index){
+    else {
         //abnormal
-        find= 0;
+        find= 8;
     }
 
 
@@ -93,10 +95,10 @@ Thread t;
 
 void xbee_rx(void);
 
-int mission;
+char mission;
 
 int main() {
-    mission =1;
+    mission ='1';
     led1 =1;
     parallax_ping  ping1(pin13);
     //parallax_encoder encoder0(pin4, encoder_ticker_left);
@@ -105,31 +107,39 @@ int main() {
     //encoder1.reset();    
     uart.baud(9600);
     xbee.baud(9600);    
-    //t.start(callback(&queue, &EventQueue::dispatch_forever));
-    //queue.call_every(1000,&xbee_rx);
+    t.start(callback(&queue, &EventQueue::dispatch_forever));
+    queue.call_every(1000,&xbee_rx);
     car.goStraight(100);
 
 //    while(ping1 >=5){wait_us(50);}
-     wait(11);
+     wait(9.7);
      car.stop();
-
-     car.turn(100,0.03);
+     wait(0.5);
+     car.turn(-60,-0.03);
      //encoder1.reset();
      //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
-     wait(2.5);
+     wait(0.5);
      car.stop();
+     wait(0.9);
+     car.turn(-70 ,-0.03);
+     //encoder1.reset();
+     //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
+     wait(1.0);
+     car.stop();
+     wait(0.5);
 
      //encoder1.reset();
      car.goStraight(100);
      //while(encoder1.get_cm()<100) wait_ms(50);
     //while(ping1 >=5){wait_us(50);}
 
-     wait(3.6);
+     wait(2.5);
      car.stop();
-     car.turn(-100,0.03);
+     wait(0.5);
+     car.turn(-60,0.03);
      //encoder1.reset();
      //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
-     wait(2.5);
+     wait(2);
      car.stop();
     char s[5];
 
@@ -153,53 +163,81 @@ int main() {
             break;
         }
     }
+     send =1;
+     xbee.printf("o");
+     wait(0.1);
      xbee.printf("%c",recv);
-
+     send =0;
      car.turn(100,0.03);
      //encoder1.reset();
      //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
-     wait(2);
+     wait(1.5);
      car.stop();
+     wait(0.5);
+
+
 
      //encoder1.reset();
      car.goStraight(100);
      //while(encoder1.get_cm()<30) wait_ms(50);
-     wait(2);
+     wait(4.8);
      car.stop();
      wait_ms(1000);
-     car.turn(100,-0.3);
+     car.turn(60,-0.03);
      //encoder1.reset();
      //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
-     wait(2);
+     wait(1.5);
      car.stop();
+     wait(0.5);
+
+     car.turn(60,-0.03);
+     //encoder1.reset();
+     //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
+     wait(0.5);
+     car.stop();
+     wait(0.5);
+
+
     car.goStraight(-100);
-    wait(3);
+    wait(2);
+
+    car.stop();
+    wait(1);
     // encoder1.reset();
      car.goStraight(100);
      //while(encoder1.get_cm()<30) wait_ms(50);
-     wait(3);
+     wait(2.2);
      car.stop();
-     car.turn(-100,0.3);
-     wait(2);
+     wait(0.5);
+     car.turn(-100,0.03);
+     wait(1.4);
      //encoder0.reset();
      //while(encoder0.get_cm()<10.2*2*PI/4) wait_ms(50);
      car.stop();
+     wait(0.5);
     // encoder1.reset();
      car.goStraight(100);
      //while(encoder1.get_cm()<70) wait_ms(50);
-     wait(5);
+     wait(4.5);
     //while(ping1 >=50){wait_us(50);}
      car.stop();
-     car.turn(-100,-0.3);
-     wait(2);
+     wait(0.5);
+     car.turn(-90,0.03);
+     wait(0.8);
+     car.stop();
+     wait(0.4);
+     car.turn(-90,0.03);
+     wait(0.8);
+
      //encoder0.reset();
      //while(encoder0.get_cm()<10.2*2*PI/4) wait_ms(50);
      car.stop();
+     wait(0.5);
     // encoder1.reset();
      car.goStraight(100);
      //while(encoder1.get_cm()<100) wait_ms(50);
     //while(ping1 >=5){wait_us(50);}
-     wait(5);
+     wait(7.8);
      car.stop();
 //     publish_message(&client);
 
@@ -211,10 +249,10 @@ int main() {
 
 // ////////// MISSION 2 ///////////////////
 
-//     car.turn(100,0.1);
-//     encoder0.reset();
-//     while(encoder0.get_cm()<10.2*2*PI/4) wait_ms(50);
-//     car.stop();
+     car.turn(-90,0.03);
+     wait(1.6);
+     car.stop();
+     wait(0.4);
 
 //     encoder1.reset();
 //     car.goStraight(100);
@@ -225,90 +263,137 @@ int main() {
 //     encoder0.reset();
 //     while(encoder0.get_cm()<10.2*2*PI/4) wait_ms(50);
 //     car.stop();
-/*    mission =2;
-    int find = 0;
+    mission ='2';
+    int find=10;
     int i;
-    float thing[10]={0};
+    float thing[5]={0};
     float max, min;
     int max_index, min_index;
     
     car.goStraight(100);
-    wait(8);
+    wait(1);
     car.stop();
     wait(0.5);
 
-    car.turn(100,-0.3);
-    wait(2);
-    car.stop();
-    wait(0.5);
+     car.turn(-100,0.03);
+     wait(1.6);
+     car.stop();
+     wait(0.4);
 
     car.goStraight(100);
-    wait(4);
+    wait(1);
     car.stop();
     wait(0.5);
 
-    car.turn(100,0.3);
-    wait(2);
+     car.turn(-90,-0.03);
+     wait(0.9);
+     car.stop();
+     wait(0.4);
+     car.turn(-90,-0.03);
+     wait(0.5);
+     car.stop();
+     wait(0.5);
+
+
+    car.goStraight(100);
+    wait(1);
     car.stop();
     wait(0.5);
-    car.turn(100,0.3);
+
+    car.turn(-100,0.03);
     
-    for(i=0; i<=4; i++){
-        wait(0.05);
+    for(i=0; i<=2; i++){
+        wait(0.2);
         thing[i]=ping1;        
     }
 
     car.stop();
     wait(0.5);
     
-    car.turn(100,-0.3);
+    car.turn(100,0.03);
     
-    for(i=0; i<=4; i++){
-        wait(0.05);
+    for(i=0; i<=2; i++){
+        wait(0.2);
         //thing[i]=ping1;        
     }
     car.stop();
     wait(0.5);
     
-    car.turn(100,-0.3);
+    car.turn(-100,-0.03);
     
-    for(i=5; i<=9; i++){
-        wait(0.05);
+    for(i=3; i<=4; i++){
+        wait(0.2);
         thing[i]=ping1;        
     }
 
     car.stop();
     wait(0.5);
 
-    car.turn(100,0.3);
+    car.turn(100,-0.03);
     
-    for(i=0; i<=4; i++){
-        wait(0.05);
+    for(i=3; i<=4; i++){
+        wait(0.2);
     }
 
     car.stop();
     wait(0.5);
+    send =1;
+    find_thing(thing,find);
+    xbee.printf("m");
+    wait(0.1);
+    xbee.printf("%d",find);
+//    car.turn(100,0.03);
+    send =0;
+    car.goStraight(-100);
+    wait(1.0);
 
-    car.turn(100,0.3);
-
-    car.goStraight(200);
-    wait(5);
-    if(find ==0)
-        led1=0;
-    //printf("No\r\n");
-    car.turn(100,-0.3);
-    wait(2);
+    car.turn(100,-0.03);
+    wait(1.5);
     car.stop();
+    wait(0.5);
+    //if(find ==0)
+    //    led1=0;
+    //printf("No\r\n");
+
+    car.goStraight(-100);
+    wait(1);
+    car.stop();
+    wait(0.5);
+
+    car.turn(100,0.03);
+    wait(1.2);
+    car.stop();
+    wait(0.5);
+
+//    car.turn(100,-0.3);
+//    wait(2);
+//    car.stop();
     car.goStraight(200);
     wait(5);
-    printf("finish\r\n");
+
+    car.turn(-100,0.03);
+    wait(1.5);
+    car.stop();
+    wait(0.5);
+
+    car.goStraight(100);
+    wait(8);
+    car.stop();
+
+    xbee.printf("f");
     led1 =1;
-    car.stop();*/
+    car.stop();
 }
 
 
 void xbee_rx(void)
 {
-  xbee.printf("%d",mission);
+    if(send ==0)
+        xbee.printf("%c",mission);
+    else
+    {
+        ;
+    }
+    
   //printf("mission=%d\r\n",mission);
 }

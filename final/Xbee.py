@@ -1,93 +1,100 @@
-import serial
+import paho.mqtt.client as paho
 
 import time
 
+import serial
+
 import locale
-
-import matplotlib.pyplot as plt
-
-import numpy as np
 
 import threading
 
-# XBee setting
+mqttc = paho.Client()
+
+# Settings for connection
+
+host = "172.16.241.141"
+
+topic= "velocity"
+
+port = 1883
+
+
+# Callbacks
+
+def on_connect(self, mosq, obj, rc):
+
+    print("Connected rc: " + str(rc))
+
+
+def on_message(mosq, obj, msg):
+
+    print("[Received] Topic: " + msg.topic + ", Message: " + str(msg.payload) + "\n")
+
+
+def on_subscribe(mosq, obj, mid, granted_qos):
+
+    print("Subscribed OK")
+
+
+def on_unsubscribe(mosq, obj, mid, granted_qos):
+
+    print("Unsubscribed OK")
+
+
+# Set callbacks
+
+mqttc.on_message = on_message
+
+mqttc.on_connect = on_connect
+
+mqttc.on_subscribe = on_subscribe
+
+mqttc.on_unsubscribe = on_unsubscribe
+
+
+# Connect and subscribe
+
+print("Connecting to " + host + "/" + topic)
+
+mqttc.connect(host, port=1883, keepalive=60)
+
+mqttc.subscribe(topic, 0)
 
 serdev = '/dev/ttyUSB0'
 
 s = serial.Serial(serdev, 9600)
 
-
-s.write("+++".encode())
-
-char = s.read(2)
-
-print("Enter AT mode.")
-
-print(char.decode())
+print("start")
 
 
-s.write("ATMY 0x00\r\n".encode())
 
-char = s.read(3)
+mission=[]
+number=[]
+find_object=[]
 
-print("Set MY 0x00.")
+while(1):
 
-print(char.decode())
+    line=s.read(1)
 
+    x=line.decode()
 
-s.write("ATDL 0xFFFF\r\n".encode())
+    if x=='o':
+        line=s.read(1)
+        number=line.decode()
+    #x=locale.atoi(x)
 
-char = s.read(3)
+    #mqttc.publish(topic, x)
+    elif x=='m':
+        line=s.read(1)
+        find_object=int(line.decode())
+    elif x=='f':
+        break
+    else:
+        mission.append(int(x))
 
-print("Set DL 0xFFFF.")
-
-print(char.decode())
-
-
-s.write("ATID 0x4041\r\n".encode())
-
-char = s.read(3)
-
-print("Set PAN ID 0x4041.")
-
-print(char.decode())
-
-
-s.write("ATWR\r\n".encode())
-
-char = s.read(3)
-
-print("Write config.")
-
-print(char.decode())
-
-s.write('ATWR\r\n'.encode())
-
-char = s.read(3)
-
-print('Write config.')
-
-print(char.decode())
-
-
-s.write('ATCN\r\n'.encode())
-
-char = s.read(3)
-
-print('Exit AT mode.')
-
-print(char.decode())
-
-print("start sending RPC")
-
-def job(a1,a2):
-    while 1:
-        line=[]
-        time.sleep(1.1)
-
-thread_get = threading.Thread(target = job, args=(line,line1))
-thread_get.start()
-
-while True:
-    line=s.readline()
-    print(line)
+    #mqttc.loop()
+    
+    time.sleep(0.1)
+print("mission:"+str(mission)[1:-1] )
+print(" find_object:"+str(find_object)[0] )
+print("identify number:"+str(number)[0] )
