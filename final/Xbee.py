@@ -60,7 +60,7 @@ mqttc.connect(host, port=1883, keepalive=60)
 
 mqttc.subscribe(topic, 0)
 
-serdev = '/dev/ttyUSB0'
+serdev = '/dev/ttyUSB2'
 
 s = serial.Serial(serdev, 9600)
 

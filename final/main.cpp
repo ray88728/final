@@ -71,19 +71,19 @@ void find_thing(float thing[],int find){
 
     if((abs(thing[2]-thing[3])<5)&&(abs(thing[3]-thing[4])<5)&&abs(thing[2]-thing[4])<5){
         //RECTANGULAR
-        find= 5;
+        find= 0;
     }
     else if(max_index == 4){
         //right triangle
-        find= 6;
+        find= 1;
     }
     else if(2<=max_index && 4>= max_index){
         //triangle
-        find= 7;
+        find= 2;
     }
     else {
         //abnormal
-        find= 8;
+        find= 3;
     }
 
 
@@ -118,9 +118,9 @@ int main() {
      car.turn(-60,-0.03);
      //encoder1.reset();
      //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
-     wait(0.5);
+     wait(1.0);
      car.stop();
-     wait(0.9);
+     wait(0.8);
      car.turn(-70 ,-0.03);
      //encoder1.reset();
      //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
@@ -140,6 +140,9 @@ int main() {
      //encoder1.reset();
      //while(encoder1.get_cm()<10.2*2*PI/4) wait_ms(50);
      wait(2);
+     car.stop();
+     car.goStraight(-100);
+     wait(0.5);
      car.stop();
     char s[5];
 
@@ -199,14 +202,14 @@ int main() {
 
 
     car.goStraight(-100);
-    wait(2);
+    wait(2.5);
 
     car.stop();
     wait(1);
     // encoder1.reset();
      car.goStraight(100);
      //while(encoder1.get_cm()<30) wait_ms(50);
-     wait(2.2);
+     wait(2.5);
      car.stop();
      wait(0.5);
      car.turn(-100,0.03);
@@ -296,7 +299,7 @@ int main() {
 
 
     car.goStraight(100);
-    wait(1);
+    wait(1.4);
     car.stop();
     wait(0.5);
 
@@ -361,7 +364,7 @@ int main() {
     wait(0.5);
 
     car.turn(100,0.03);
-    wait(1.2);
+    wait(1.6);
     car.stop();
     wait(0.5);
 
